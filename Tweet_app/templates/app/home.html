@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Jersey+10&display=swap"   
+ rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+  <title>Tweet</title>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="{% static 'app/images/Logo2.png' %}" alt="logo" height="55" width="60" />
+        <h1>Tweet Tweet</h1>
+        <center><h3 style="color: rgb(209, 254, 254);">{{error}}</h3></center>
+      </div>
+      <button class="btn btn-large btn-share">"Post a job opening here.</button>
+    </header>
+    <form action="{% url 'create_tweet' %}" class="share-fact hidden" method="post">  
+        {% csrf_token %}
+        <input type="text" name="tweet" id="tweet" placeholder="Share a job opportunity you found....." autocomplete="off">
+        <span>200</span>
+        <input type="text" name="source" id="source" placeholder="Trustworthy source..." autocomplete="off">
+        <select name="selection" id="selection">
+            <option value="all">All</option>
+            <option value="fresher">Fresher</option>
+            <option value="experienced">Experienced</option>
+        </select>
+        <button class="btn btn-large" type="submit">Post</button>
+    </form>
+    <main class="main">
+      <aside>
+        <ul>
+          <li class="category">
+            <button class="btn btn-all" data-category="all" onclick="window.location.href='{% url 'index' %}'" style="background-color: #3b82f6; ">All</button>
+          </li>
+          <li class="category">
+            <button class="btn btn-cat" data-category="fresher" onclick="window.location.href='{% url 'tweet_data' 'fresher' %}'" style="background-color: #3b82f6;">Fresher</button>
+          </li>
+          <li class="category">
+            <button class="btn btn-cat" data-category="experienced" onclick="window.location.href='{% url 'tweet_data' 'experienced' %}'" style="background-color:#16a34a">Experienced</button>
+          </li>
+        </ul>
+      </aside>
+      
+      <section id="tweets">
+        {% for tweet in tweets %}
+          <li class="fact">
+            <p>{{ tweet.text }}</p>
+            <a class="source" href="{{ tweet.source }}" target="_blank">
+              Source
+            </a>
+            <span class="tag" style="background-color: #3b82f6;">{{ tweet.category }}</span>
+            </li>
+        {% endfor %}
+      </section>
+      
+      <script src="{% static 'app/js/script.js' %}"></script>
